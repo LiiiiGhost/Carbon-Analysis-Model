@@ -5,28 +5,28 @@ from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
 
-# 读取数据
-with open('constant_trend.json', 'r') as f:
+# Read data
+with open('upward_trend.json', 'r') as f:
     data = json.load(f)
 
-# 提取数据
+# Extract data
 df = pd.DataFrame(data)
 df = df[['date', 'value']]
 
-# 将日期列转为时间戳
+# Convert date column to timestamp
 df['date'] = pd.to_datetime(df['date'])
 
-# 将时间戳作为索引
+# Set timestamp as index
 df.set_index('date', inplace=True)
 
-# 缺失值填充为前一天的数据
+# Fill missing values with previous day's data
 df.fillna(method='ffill', inplace=True)
 
-# 数据归一化
+# Normalize data
 scaler = MinMaxScaler(feature_range=(0, 1))
 scaled_data = scaler.fit_transform(df)
 
-# 定义函数：生成训练数据
+# Define function to create training data
 def create_train_data(dataset, look_back=1):
     X, Y = [], []
     for i in range(len(dataset) - look_back - 1):
@@ -35,24 +35,24 @@ def create_train_data(dataset, look_back=1):
         Y.append(dataset[i + look_back, 0])
     return np.array(X), np.array(Y)
 
-# 生成训练数据
+# Create training data
 look_back = 30
 X_train, Y_train = create_train_data(scaled_data, look_back)
 
-# 将输入数据转换为3维
+# Reshape input data to 3D
 X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
 
-# 创建LSTM模型
+# Create LSTM model
 model = Sequential()
 model.add(LSTM(units=50, return_sequences=True, input_shape=(X_train.shape[1], 1)))
 model.add(LSTM(units=50))
 model.add(Dense(units=1))
 model.compile(optimizer='adam', loss='mean_squared_error')
 
-# 训练模型
+# Train model
 model.fit(X_train, Y_train, epochs=100, batch_size=32)
 
-# 预测未来6个月每天数据
+# Predict daily data for next 6 months
 last_date = df.index[-1]
 prediction_dates = pd.date_range(last_date, periods=180, freq='D')
 prediction_data = np.empty((180, 1))
@@ -64,20 +64,20 @@ for i in range(look_back, 180):
     yhat = model.predict(x_input)
     prediction_data[i] = yhat
 
-# 反归一化
+# Inverse normalization
 prediction_data = scaler.inverse_transform(prediction_data)
 
-# 生成预测数据的日期和值
+# Generate dates and values for predictions
 predictions = pd.DataFrame(prediction_data, index=prediction_dates, columns=['value'])
 
-# 计算RMSE
+# Calculate RMSE
 train = df.iloc[:-180]
 test = df.iloc[-180:]
 test['predictions'] = predictions
 rmse = np.sqrt(np.mean((test['value'] - test['predictions'])**2))
 print('RMSE:', rmse)
 
-# 生成新的JSON文件储存数据
+# Generate new JSON file to store data
 predictions.reset_index(inplace=True)
 predictions.rename(columns={'index': 'date'}, inplace=True)
 predictions['date'] = predictions['date'].dt.strftime('%Y-%m-%d')
