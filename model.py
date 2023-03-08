@@ -6,6 +6,28 @@ from keras.models import Sequential
 from keras.layers import Dense, LSTM
 from keras.callbacks import EarlyStopping
 
+"""
+This code reads carbon emissions data from a JSON file, pre-processes the data and uses it to train an LSTM model to predict future carbon emissions. The prediction results are then saved to a new JSON file.
+
+The code performs the following steps.
+
+    Reads the data from the JSON file and extracts the relevant columns.
+    Converts the date column to a timestamp and uses it as an index.
+    Interpolates the missing data to fill in the gaps in the time series.
+    Normalise the data using the MinMaxScaler from the sklearn library.
+    Define a function to create the training data for the LSTM model.
+    Create the training data by calling the function and specifying a 90-day look-back window.
+    Reshape the input data into three dimensions to fit the LSTM model.
+    Define a three-layer LSTM model with 128 cells per layer and compile it using the Adam optimiser and mean error loss.
+    Set early stops to prevent over-fitting.
+    Train the LSTM model using the training data, a validation split of 0.1 and an early stop callback.
+    Use the trained LSTM model to predict daily carbon emissions for the next 3 months.
+    Reverse normalise the predictions to obtain the actual carbon emission values.
+    Calculate the root mean square error between the predicted and actual carbon emission values for the test set.
+    Save the predicted carbon emission values to a new JSON file.
+
+"""
+
 # Read data
 with open('sine_carbon_emissions.json', 'r') as f:
     data = json.load(f)
