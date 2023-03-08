@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 
 # Generate date range
-start_date = '2017-01-01'
-end_date = '2022-12-31'
+start_date = '2019-08-01'
+end_date = '2023-02-21'
 date_range = pd.date_range(start=start_date, end=end_date, freq='D')
 
 # Generate sine wave data

@@ -2,7 +2,7 @@ import json
 import matplotlib.pyplot as plt
 
 # load json file
-with open('co2_emissions_predictions.json', 'r') as f:
+with open('predicted_monthly_sine_carbon_emissions.json', 'r') as f:
     data = json.load(f)
 
 # extract 'date' and 'value' data

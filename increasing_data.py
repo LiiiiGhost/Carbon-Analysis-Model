@@ -6,7 +6,7 @@ increase_rate = 0.1
 
 # 生成2017年到2022年每天的数据
 data = []
-for year in range(2017, 2023):
+for year in range(2020, 2023):
     for month in range(1, 13):
         # 处理不同月份的天数
         if month in [1, 3, 5, 7, 8, 10, 12]:
@@ -28,5 +28,5 @@ for year in range(2017, 2023):
             })
 
 # 将数据存储到json文件中
-with open("upward_trend.json", "w") as f:
+with open("increasing_data.json", "w") as f:
     json.dump(data, f)
