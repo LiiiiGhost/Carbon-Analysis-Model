@@ -60,13 +60,13 @@ server_useage_rate = last_day_data['server usage']
 server_work_time = last_day_data['server work time']
 server_cooling_type = last_day_data['cooling type']
 server_configuration = last_day_data['server configuration']
-    
+
 #predict of future cabon emisson with changes
 calculated_future_carbon = carbon_kWh
 
 #prompt format
 prompt = "Hi, we are running an project that help Volvo to reduce the carbon emisson of their sale software server. The current co2 emisson per day is " + str(carbon_emisson) + ". and The server is located in " + server_location + ". We want to reduce the carbon by these sections, can you help us getting more detail advice and explain it: "
-    
+
 # Prioritise the use of energy that is clean 
 if calculated_future_carbon > 100:
     if server_energy_type in energy_types:
@@ -86,7 +86,7 @@ if calculated_future_carbon > 100:
         prompt = prompt + advice_energy_type
 else:
     prompt = "Hi, we are running an project that help Volvo to reduce the carbon emisson of their sale software server. The current co2 emisson per day is " + str(carbon_emisson) +". and The server is located in "+ server_location +". The current energy type of server use is: "+ server_energy_type + ". The current cooling type of server use is: "+ server_cooling_type + ". The current server usage rate is: " + str(server_useage_rate) + ". The current server work hours per day is : " + str(server_work_time) + ". The current cpu of server use is: "+ server_configuration + ". Can you help us getting more detail advice in reduce carbon emisson and explain it."
-                    
+
 # Increase server usage
 if calculated_future_carbon > 100:
     if server_useage_rate < 80:
@@ -106,7 +106,6 @@ if calculated_future_carbon > 100:
 
 else:
     advice_server_usage = None
-
 
 # Reduction of server working hours/day
 if calculated_future_carbon > 100:
@@ -147,7 +146,7 @@ if calculated_future_carbon > 100:
         prompt = prompt + advice_cooling_type
 else:
     advice_cooling_type = None
-    
+
 # Replace server hardware configurations that consume less energy
 if calculated_future_carbon > 100:
     if server_configuration in server_configurations:
