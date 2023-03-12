@@ -30,7 +30,7 @@ for month in range(6, 13):
     values = (values - np.min(values)) / (np.max(values) - np.min(values)) * 100 + 100
     # Add date-value pairs to data list
     for date, value in zip(dates, values):
-        data.append({'date': date.strftime('%Y-%m-%d'), 'value': round(value, 2)})
+        data.append({'date': date.strftime('%Y-%m-%d %H:%M:%S'), 'value': round(value, 2)})
 
 # Write data to JSON file
 with open('monthly_sine_carbon_emissions.json', 'w') as f:
