@@ -1,31 +1,40 @@
+import json
 import pandas as pd
 from statsmodels.tsa.stattools import adfuller
 
-def get_d_value (past_emissions):
-    # Convert the data to a DataFrame
-    data = pd.DataFrame(past_emissions)
+def calculate_stationarity(data):
+    # Perform Dickey-Fuller test
+    result = adfuller(data)
+    print('ADF Statistic: {}'.format(result[0]))
+    print('p-value: {}'.format(result[1]))
+    print('Critical Values:')
+    for key, value in result[4].items():
+        print('\t{}: {}'.format(key, value))
+        
+    if result[1] <= 0.05:
+        print("The data is stationary")
+        return True
+    else:
+        print("The data is not stationary")
+        return False
 
-    # Convert the JSON data to a DataFrame
-    df = pd.DataFrame(data)
+def difference(data, interval=1):
+    return [data[i] - data[i - interval] for i in range(interval, len(data))] + [data[-1]]
 
-    # Convert the 'date' column to date format and set it as the index
-    df['date'] = pd.to_datetime(df['date'])
-    df = df.set_index('date')
+def main():
+    with open("UKI_DAI_DataEngineering_Discovery.json") as file:
+        data = json.load(file)
+        
+    df = pd.DataFrame({"value": [row["value"] for row in data]})
+    df.index = pd.to_datetime([row["date"] for row in data])
+    
+    i = 0
+    while not calculate_stationarity(df["value"]):
+        i += 1
+        df = pd.DataFrame({"value": difference(df["value"], interval=i)})
+        df.index = pd.to_datetime(df.index)
+        
+    print("The number of differences required for stationarity is {}".format(i))
 
-    # Function to calculate the difference order
-    def difference_order(series):
-        result = adfuller(series)
-        difference_order = 0
-        while result[1] < 0.05:
-            difference_order += 1
-            series = series.diff().dropna()
-            result = adfuller(series)
-        return difference_order
-
-    # Calculate the difference order
-    difference_order = difference_order(df['value'])
-    return difference_order
-
-'''
-print("The difference order is:", difference_order)
-'''
+if __name__ == '__main__':
+    main()

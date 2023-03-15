@@ -23,10 +23,15 @@ diff2 = diff1.diff()
 fig, axs = plt.subplots(3, 1, figsize=(10, 10))
 axs[0].plot(df.index, df['value'])
 axs[0].set_title('Original Data')
+axs[0].set_ylabel('CO2 Emissions')
+
 axs[1].plot(diff1.index, diff1['value'])
 axs[1].set_title('First Difference')
+axs[1].set_ylabel('CO2 Emissions Change')
+
 axs[2].plot(diff2.index, diff2['value'])
 axs[2].set_title('Second Difference')
+axs[2].set_ylabel('CO2 Emissions Change Rate')
 
 plt.tight_layout()
 plt.show()

@@ -17,11 +17,13 @@ fig, axs = plt.subplots(1, 2, figsize=(10, 4))
 axs[0].plot(x, A1, color='red')
 axs[0].plot(x, B1, color='green')
 axs[0].set_title('Case 1: correlation coefficient +1')
+axs[0].set_ylabel("Amplitude")
 
 # Plot case 2
 axs[1].plot(x, A2, color='red')
 axs[1].plot(x, B2, color='green')
 axs[1].set_title('Case 2: correlation coefficient -1')
+axs[1].set_ylabel("Amplitude")
 
 # Show the plots
 plt.show()

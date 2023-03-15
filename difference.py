@@ -1,32 +1,41 @@
 import json
 import pandas as pd
 
+
 # Read data from JSON file
-with open('diff_data.json', 'r') as f:
+with open('EmTech_RAE.json', 'r') as f:
     data = json.load(f)
 
 # Convert data to DataFrame
 df = pd.DataFrame(data)
 
-# Convert date column to datetime
-df['date'] = pd.to_datetime(df['date'])
+n = 0
 
-# Set date column as index
-df.set_index('date', inplace=True)
+while n < 268:
+    n += 1
+    
+    df = pd.DataFrame(data)
+    # Convert date column to datetime
+    df['date'] = pd.to_datetime(df['date'])
 
-# Calculate difference between consecutive values
-df_diff = df.diff()
+    # Set date column as index
+    df.set_index('date', inplace=True)
 
-# Drop first row since it will be NaN
-df_diff.dropna(inplace=True)
+    # Calculate difference between consecutive values
+    df_diff = df.diff()
 
-# Convert DataFrame to list of dictionaries with str type dates
-diff_data = df_diff.reset_index().to_dict('records')
-for d in diff_data:
-    d['date'] = str(d['date'])
+    # Drop first row since it will be NaN
+    df_diff.dropna(inplace=True)
+
+    # Convert DataFrame to list of dictionaries with str type dates
+    diff_data = df_diff.reset_index().to_dict('records')
+    for d in diff_data:
+        d['date'] = str(d['date'])
+
+    data = diff_data
 
 # Save diff data to JSON file
-with open('diff_2_data.json', 'w') as f:
+with open('diff_data.json', 'w') as f:
     json.dump(diff_data, f)
 
 # Plot diff data

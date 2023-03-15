@@ -2,7 +2,7 @@ import json
 import matplotlib.pyplot as plt
 
 # load json file
-with open('data.json', 'r') as f:
+with open('UKI_DAI_DataEngineering_Discovery.json', 'r') as f:
     data = json.load(f)
 
 # extract 'date' and 'value' data

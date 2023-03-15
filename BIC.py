@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Read data from JSON file
-with open('diff_data.json', 'r') as f:
+with open('seasonal_data.json', 'r') as f:
     data = json.load(f)
 
 # Convert data to DataFrame
@@ -28,7 +28,7 @@ BIC = np.zeros((max_p, max_q))
 for p in range(max_p):
     for q in range(max_q):
         try:
-            model = ARIMA(df, order=(p, 1, q))
+            model = ARIMA(df, order=(p, 0, q))
             results = model.fit()
             BIC[p, q] = results.bic
         except:

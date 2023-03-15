@@ -15,5 +15,11 @@ nonstationary_data = np.cumsum(np.random.normal(loc=0, scale=1, size=1000))
 fig, ax = plt.subplots(figsize=(12,6))
 ax.plot(stationary_data, color='green', label='Stationary Data')
 ax.plot(nonstationary_data, color='blue', label='Non-Stationary Data')
-ax.legend()
+
+# Set y-axis label
+ax.set_ylabel('Value')
+
+# Set the legend with a larger font size
+ax.legend(fontsize='large')
+
 plt.show()
